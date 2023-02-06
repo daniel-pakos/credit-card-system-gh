@@ -25,6 +25,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Test envs
+        run: |
+          echo ${CCAPI_NODE_ENV}
+          echo ${NODE_ENV}
+          echo ${env.NODE_ENV}
+          echo ${vars.NODE_ENV}
+          echo ${variables.NODE_ENV}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
