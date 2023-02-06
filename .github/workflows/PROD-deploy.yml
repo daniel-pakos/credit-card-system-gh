@@ -57,7 +57,7 @@ jobs:
 
       - name: Push image
         run: |
-          aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${CCAPI_IMAGE_REGISTRY_URL}
+          aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin https://${CCAPI_IMAGE_REGISTRY_DOMAIN}
           make prod-push
 
       - name: Deploy
