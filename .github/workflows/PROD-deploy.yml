@@ -12,21 +12,21 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
+    env:
+        CCAPI_REDIS_PORT: ${{ vars.CCAPI_REDIS_PORT }}
+        CCAPI_APP_PORT: ${{ vars.vars.CAPI_APP_PORT }}
+        NODE_ENV: ${{ vars.CCAPI_NODE_ENV }}
+        LOG_LEVEL: ${{ vars.CCAPI_LOG_LEVEL }}
+        CCGUI_API_URL: ${{ vars.CCGUI_API_URL }}
+        CCGUI_APP_PORT: ${{ vars.CCGUI_APP_PORT }}
+        CCAPI_ECR_URL: ${{ vars.CCAPI_IMAGE_REGISTRY_URL }}
+        AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Test envs
-        env:
-            CCAPI_REDIS_PORT: ${{ vars.CCAPI_REDIS_PORT }}
-            CCAPI_APP_PORT: ${{ vars.vars.CAPI_APP_PORT }}
-            NODE_ENV: ${{ vars.CCAPI_NODE_ENV }}
-            LOG_LEVEL: ${{ vars.CCAPI_LOG_LEVEL }}
-            CCGUI_API_URL: ${{ vars.CCGUI_API_URL }}
-            CCGUI_APP_PORT: ${{ vars.CCGUI_APP_PORT }}
-            CCAPI_ECR_URL: ${{ vars.CCAPI_IMAGE_REGISTRY_URL }}
-            AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
         run: |
           echo ${{ vars.CCAPI_REDIS_PORT }}
           echo $CCAPI_REDIS_PORT
@@ -34,7 +34,6 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -45,8 +44,6 @@ jobs:
 
       - name: Prepare
         run: |
-          echo ${{ vars.CCAPI_REDIS_PORT }}
-          echo $CCAPI_REDIS_PORT
           touch .env
         
       - name: Setup compose cli
