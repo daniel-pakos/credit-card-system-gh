@@ -6,7 +6,7 @@ export default function Header() {
         <Container maxWidth="xl" className='Header section'>
             <header className="App-header">
                 <Typography variant="h3" component="h3">
-                Credit Card System #5
+                Credit Card System #5.1
                 </Typography>
             </header>
         </Container>
