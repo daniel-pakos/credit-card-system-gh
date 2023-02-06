@@ -5,20 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-      CCAPI_REDIS_PORT: ${CCAPI_REDIS_PORT}
-      CCAPI_APP_PORT: ${CAPI_APP_PORT}
-      NODE_ENV: ${CCAPI_NODE_ENV}
-      LOG_LEVEL: ${CCAPI_LOG_LEVEL}
-      CCGUI_API_URL: ${CCGUI_API_URL}
-      CCGUI_APP_PORT: ${CCGUI_APP_PORT}
-      CCAPI_ECR_URL: ${CCAPI_IMAGE_REGISTRY_URL}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-
 jobs:
   prod-deploy:
+    environment: production
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,12 +16,23 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Test envs
+        env:
+            CCAPI_REDIS_PORT: ${{ vars.CCAPI_REDIS_PORT }}
+            CCAPI_APP_PORT: ${{ vars.vars.CAPI_APP_PORT }}
+            NODE_ENV: ${{ vars.CCAPI_NODE_ENV }}
+            LOG_LEVEL: ${{ vars.CCAPI_LOG_LEVEL }}
+            CCGUI_API_URL: ${{ vars.CCGUI_API_URL }}
+            CCGUI_APP_PORT: ${{ vars.CCGUI_APP_PORT }}
+            CCAPI_ECR_URL: ${{ vars.CCAPI_IMAGE_REGISTRY_URL }}
+            AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ vars.{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
         run: |
-          if [ -z "${CCAPI_NODE_ENV}" ]; then echo ${CCAPI_NODE_ENV}
-          if [ -z "${NODE_ENV}" ]; then echo ${NODE_ENV}
-          if [ -z "${env.NODE_ENV}" ]; then echo ${env.NODE_ENV}
-          if [ -z "${vars.NODE_ENV}" ]; then echo ${vars.NODE_ENV}
-          if [ -z "${variables.NODE_ENV}" ]; then echo ${variables.NODE_ENV}
+          echo ${{ vars.CCAPI_REDIS_PORT }}
+          echo ${CCAPI_REDIS_PORT}
+          echo ${{ CCAPI_REDIS_PORT }}
+          echo ${NODE_ENV}
+          echo ${{NODE_ENV}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -43,7 +43,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@master
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${vars.{ matrix.node-version }}
 
       - name: Prepare
         run: touch .env
@@ -62,7 +62,7 @@ jobs:
 
       - name: Push image
         run: |
-          aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${CCAPI_IMAGE_REGISTRY_URL}
+          aws ecr get-login-password --region ${vars.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${vars.CCAPI_IMAGE_REGISTRY_URL}
           make prod-push
 
       - name: Deploy
