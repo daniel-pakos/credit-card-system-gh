@@ -40,13 +40,14 @@ jobs:
       - name: Prepare
         run: |
           touch .env
-          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh 
+          npm install -g turbo
             
       - name: Lint
-        run: make lint
+        run: npm run lint
 
       - name: Test
-        run: make test
+        run: npm run test
 
       - name: Build
         run: make prod-build
