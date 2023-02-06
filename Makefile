@@ -37,7 +37,7 @@ prod-push:
 prod-deploy:
 	@docker context use ecs-context
 #@aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 537583533687.dkr.ecr.eu-west-1.amazonaws.com
-	@docker-compose -f docker-compose-deploy-prod.yml --profile credit-card --project-name services-cc up
+	@docker compose -f docker-compose-deploy-prod.yml --profile credit-card --project-name services-cc up
 	@docker context use default
 
 # NPM commands
