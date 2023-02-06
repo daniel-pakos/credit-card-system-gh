@@ -14,8 +14,8 @@ jobs:
     env:
       CCAPI_REDIS_PORT: ${CCAPI_REDIS_PORT}
       CCAPI_APP_PORT: ${CAPI_APP_PORT}
-      CCAPI_NODE_ENV: ${CCAPI_NODE_ENV}
-      CCAPI_LOG_LEVEL: ${CCAPI_LOG_LEVEL}
+      NODE_ENV: ${CCAPI_NODE_ENV}
+      LOG_LEVEL: ${CCAPI_LOG_LEVEL}
       CCGUI_API_URL: ${CCGUI_API_URL}
       CCGUI_APP_PORT: ${CCGUI_APP_PORT}
       CCAPI_ECR_URL: ${CCAPI_IMAGE_REGISTRY_URL}
@@ -32,11 +32,9 @@ jobs:
 
       - name: Prepare
         run: |
-            touch .env
             curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-            ls -las
-            make create-deploy-context 
-
+            touch .env
+            
       - name: Lint
         run: make lint
 
@@ -52,5 +50,7 @@ jobs:
           make prod-push
 
       - name: Deploy
-        run: make prod-deploy
+        run: |
+          make create-deploy-context 
+          make prod-deploy
  
