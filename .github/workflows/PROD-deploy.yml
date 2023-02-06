@@ -29,9 +29,9 @@ jobs:
             AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
         run: |
           echo ${{ vars.CCAPI_REDIS_PORT }}
-          echo ${ CCAPI_REDIS_PORT }
+          echo ${CCAPI_REDIS_PORT}
           echo ${{ CCAPI_REDIS_PORT }}
-          echo ${ NODE_ENV }
+          echo ${NODE_ENV}
           echo ${{ NODE_ENV }}
 
       - name: Set up QEMU
