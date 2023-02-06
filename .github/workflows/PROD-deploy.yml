@@ -29,13 +29,10 @@ jobs:
             AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
         run: |
           echo ${{ vars.CCAPI_REDIS_PORT }}
-          echo ${CCAPI_REDIS_PORT}
-          echo ${{ CCAPI_REDIS_PORT }}
-          echo ${NODE_ENV}
-          echo ${{ NODE_ENV }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+        
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -46,7 +43,9 @@ jobs:
           node-version: ${vars.{ matrix.node-version }}
 
       - name: Prepare
-        run: touch .env
+        run: |
+          echo ${{ vars.CCAPI_REDIS_PORT }}
+          touch .env
         
       - name: Setup compose cli
         run: curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
