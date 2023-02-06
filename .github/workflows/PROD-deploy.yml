@@ -25,14 +25,14 @@ jobs:
             CCGUI_APP_PORT: ${{ vars.CCGUI_APP_PORT }}
             CCAPI_ECR_URL: ${{ vars.CCAPI_IMAGE_REGISTRY_URL }}
             AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ vars.{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
         run: |
           echo ${{ vars.CCAPI_REDIS_PORT }}
-          echo ${CCAPI_REDIS_PORT}
+          echo ${ CCAPI_REDIS_PORT }
           echo ${{ CCAPI_REDIS_PORT }}
-          echo ${NODE_ENV}
-          echo ${{NODE_ENV}}
+          echo ${ NODE_ENV }
+          echo ${{ NODE_ENV }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
