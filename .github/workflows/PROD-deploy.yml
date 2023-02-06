@@ -34,9 +34,8 @@ jobs:
         run: |
             touch .env \
             curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh \
-            cd ../../ \
             ls -las \
-            make create-deploy-context 
+        #make create-deploy-context 
 
       - name: Lint
         run: make lint
