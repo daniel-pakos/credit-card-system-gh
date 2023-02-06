@@ -32,10 +32,10 @@ jobs:
 
       - name: Prepare
         run: |
-            touch .env \
-            curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh \
-            ls -las \
-        #make create-deploy-context 
+            touch .env
+            curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+            ls -las
+            make create-deploy-context 
 
       - name: Lint
         run: make lint
