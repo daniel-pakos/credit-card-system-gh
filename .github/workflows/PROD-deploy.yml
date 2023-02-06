@@ -14,7 +14,7 @@ jobs:
         node-version: [18.x]
     env:
         CCAPI_REDIS_PORT: ${{ vars.CCAPI_REDIS_PORT }}
-        CCAPI_APP_PORT: ${{ vars.vars.CAPI_APP_PORT }}
+        CCAPI_APP_PORT: ${{ vars.CAPI_APP_PORT }}
         NODE_ENV: ${{ vars.CCAPI_NODE_ENV }}
         LOG_LEVEL: ${{ vars.CCAPI_LOG_LEVEL }}
         CCGUI_API_URL: ${{ vars.CCGUI_API_URL }}
