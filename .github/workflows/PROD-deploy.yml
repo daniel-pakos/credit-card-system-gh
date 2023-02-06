@@ -41,15 +41,13 @@ jobs:
         run: |
           touch .env
           curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-
-      - name: Install deps
-        run: npm install
+          npm install -g turbo
 
       - name: Lint
-        run: npm run lint
+        run: make lint
 
       - name: Test
-        run: npm run test
+        run: make test
 
       - name: Build
         run: make prod-build
