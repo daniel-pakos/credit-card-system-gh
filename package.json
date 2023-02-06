@@ -13,7 +13,6 @@
     "services/**/*"
   ],
   "scripts": {
-    "prepare": "husky install",
     "precommit": "turbo build format lint",
     "clean": "turbo clean",
     "build": "turbo build",
