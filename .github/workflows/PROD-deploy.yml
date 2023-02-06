@@ -1,21 +1,21 @@
-name: Develop - Deploy
-on: push
-  branches:
-      - 'main'
+name: Production - Deploy
+
+on: 
+  push:
+    branches: [ main ]
+
 jobs:
-  lint:
+  prod-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
         # mock env file for docker compose - env vars are taken from BB env vars instead
       - name: Prepare
         with:
           node-version: 18.13.x
           cache: npm
-        secrets:
-          AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
         env:
           CCAPI_REDIS_PORT: ${CCAPI_REDIS_PORT}
           CCAPI_APP_PORT: ${CAPI_APP_PORT}
@@ -24,6 +24,8 @@ jobs:
           CCGUI_API_URL: ${CCGUI_API_URL}
           CCGUI_APP_PORT: ${CCGUI_APP_PORT}
           CCAPI_ECR_URL: ${CCAPI_IMAGE_REGISTRY_URL}
+          AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
         run: |
           touch .env \
