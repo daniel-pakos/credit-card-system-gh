@@ -8,9 +8,8 @@ jobs:
   prod-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
+      
         # mock env file for docker compose - env vars are taken from BB env vars instead
       - name: Setup
         uses: actions/setup-node@v3
@@ -19,7 +18,6 @@ jobs:
           cache: npm
 
       - name: Prepare
-        uses: actions/checkout@v3
         env:
             CCAPI_REDIS_PORT: ${CCAPI_REDIS_PORT}
             CCAPI_APP_PORT: ${CAPI_APP_PORT}
