@@ -23,7 +23,7 @@ services:
         CCAPI_REDIS_PORT: 6379
         CCAPI_API_PREFIX: api/v1
         CCAPI_REDIS_HOST: redis.services-cc.local
-    image: ${CCAPI_IMAGE_REGISTRY_URL}/credit-card-api:latest
+    image: ${CCAPI_IMAGE_REGISTRY_DOMAIN}/credit-card-api:latest
     x-aws-pull_policy: "arn:aws:secretsmanager:eu-west-1:537583533687:secret:services-ccs-secret"
     secrets:
       - services-ccs-secret
@@ -45,7 +45,7 @@ services:
   
   # GUI
   ccgui:
-    image: ${CCAPI_IMAGE_REGISTRY_URL}/credit-card-gui:latest
+    image: ${CCAPI_IMAGE_REGISTRY_DOMAIN}/credit-card-gui:latest
     x-aws-pull_policy: "arn:aws:secretsmanager:eu-west-1:537583533687:secret:services-ccs-secret"
     secrets:
       - services-ccs-secret
