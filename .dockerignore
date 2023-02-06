@@ -1,0 +1,14 @@
+**/.git
+**/node_modules
+npm-debug.log
+.env
+.gitattributes
+.husky
+.idea
+.vscode
+**/dist
+**/*.spec.ts
+**/jest*
+**/tsconfig.ref.tsbuildinfo
+**/Dockerfile
+**/out

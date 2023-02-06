@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": false,
+    "noImplicitAny": false,
+    "allowJs": true
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": [
+    "src/",
+    "jest.unit.config.js",
+    "jest.integration.config.js",
+    "tsconfig.json"
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
+}

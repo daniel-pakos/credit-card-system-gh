@@ -1,0 +1,29 @@
+image: python:3.8.1
+
+pipelines:
+  branches:
+    "master":
+      - step:
+          name: Build
+          services:
+            - docker
+          caches:
+            - docker
+            - pip
+          script:
+            - pip install awscli docker-compose
+            - curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+            - touch .env # mock env file for docker compose - env vars are taken from BB env vars instead
+            - make prod-build
+            - IMAGE="${CCAPI_ECR_URL}/credit-card-api:latest"
+            - aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+            - aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+            - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${CCAPI_ECR_URL}
+            - make prod-push
+            - make init-deploy
+            - make prod-deploy
+
+definitions:
+  services:
+    docker:
+      memory: 2048

@@ -1,0 +1,22 @@
+
+html, body { margin: 0; padding: 0; background: #EFF3F6;}
+
+.App h5 { margin: 1rem 0; }
+
+.App {
+  min-height: 100vh;
+  font-size: calc(10px + 2vmin);
+  color: #4B565E;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App .section {
+  margin: 2rem;
+}
+
+.App .form-wrap .field-wrap {
+  margin-bottom: 1rem;
+}

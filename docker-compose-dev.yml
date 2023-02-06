@@ -1,0 +1,60 @@
+version: "3.7"
+
+services:
+  #REDIS
+  redis:
+    image: 'redis:alpine'
+    container_name: cache
+    restart: always
+    volumes: 
+      - cache:/data
+    ports:
+      - "${CCAPI_REDIS_PORT}:${CCAPI_REDIS_PORT}"
+    healthcheck:
+      test: "exit 0"
+
+  # CREDIT CARD API
+  credit-card-api:
+    depends_on:
+      redis:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: ${CCAPI_APP_PORT}
+      NODE_ENV: ${NODE_ENV}
+      LOG_LEVEL: ${LOG_LEVEL}
+    ports:
+      - "${CCAPI_APP_PORT}:${CCAPI_APP_PORT}"
+    build:
+      context: .
+      dockerfile: ./services/credit-card-api/Dockerfile.dev
+    command: bash -c "cd ./services/credit-card-api && npm run dev:docker" 
+    volumes:
+      - ./services/credit-card-api:/var/web/services/credit-card-api
+      - /var/app/node_modules
+
+  # CREDIT CARD GUI
+  credit-card-gui:
+    env_file:
+      - .env
+    environment:
+      REACT_APP_API_URL: ${CCGUI_API_URL}
+      NODE_ENV: ${NODE_ENV}
+    build:
+      context: .
+      dockerfile: ./apps/credit-card-gui/Dockerfile.dev
+    ports:
+      - "${CCGUI_APP_PORT}:${CCGUI_APP_PORT}"
+    depends_on:
+      - credit-card-api
+    stdin_open: true
+    volumes:
+       - ./apps/credit-card-gui/:/var/web/apps/credit-card-gui
+       - /var/app/node_modules
+    command: bash -c "cd ./apps/credit-card-gui && npm start" 
+
+volumes:
+  cache:
+    driver: local
