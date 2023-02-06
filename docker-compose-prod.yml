@@ -4,7 +4,7 @@ services:
   #REDIS
   redis:
     image: 'redis:alpine'
-    profiles: ["credit-card"]
+    profiles: ["credit-card", "credit-card-api"]
     env_file:
       - .env
     container_name: cache
@@ -21,7 +21,7 @@ services:
   # CREDIT CARD API
   credit-card-api:
     image: "${CCAPI_IMAGE_REGISTRY_DOMAIN}/credit-card-api:latest"
-    profiles: ["credit-card"]
+    profiles: ["credit-card", "credit-card-api"]
     env_file:
       - .env
     environment:
@@ -46,7 +46,7 @@ services:
   #CREDIT CARD GUI
   credit-card-gui:
     image: "${CCAPI_IMAGE_REGISTRY_DOMAIN}/credit-card-gui:latest"
-    profiles: ["credit-card"]
+    profiles: ["credit-card", "credit-card-gui"]
     env_file:
       - .env
     environment:

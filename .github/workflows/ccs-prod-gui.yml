@@ -1,0 +1,71 @@
+name: Credit Card Production GUI - Deploy
+
+on: 
+  push:
+    branches: [ main ]
+    paths: [ 'apps/credit-card-gui/**' ]
+  workflow_dispatch:
+
+env:
+  WORKSPACE: "credit-card-gui"
+  ECS_CLUSTER: "services-cc"
+  ECS_SERVICE: "services-cc-CcguiService-mv93oDxZh2bg"
+
+jobs:
+  prod-deploy:
+    environment: production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    env:
+        CCAPI_REDIS_PORT: ${{ vars.CCAPI_REDIS_PORT }}
+        CCAPI_APP_PORT: ${{ vars.CCAPI_APP_PORT }}
+        NODE_ENV: ${{ vars.CCAPI_NODE_ENV }}
+        LOG_LEVEL: ${{ vars.CCAPI_LOG_LEVEL }}
+        CCGUI_API_URL: ${{ vars.CCGUI_API_URL }}
+        CCGUI_APP_PORT: ${{ vars.CCGUI_APP_PORT }}
+        CCAPI_IMAGE_REGISTRY_DOMAIN: ${{ vars.CCAPI_IMAGE_REGISTRY_DOMAIN }}
+        AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup node
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Prepare
+        run: |
+          touch .env
+          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+          npm install -g turbo
+
+      - name: Install deps
+        run: npm ci --include=dev
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: docker-compose -f docker-compose-prod.yml --profile $WORKSPACE build
+
+      - name: Push image
+        run: |
+          aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin https://${CCAPI_IMAGE_REGISTRY_DOMAIN}
+          docker-compose -f docker-compose-prod.yml --profile $WORKSPACE push
+
+      - name: Deploy
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
+ 

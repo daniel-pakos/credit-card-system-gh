@@ -31,10 +31,11 @@ prod-build:
 
 # push to registry prod image
 prod-push:
+	@aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 537583533687.dkr.ecr.eu-west-1.amazonaws.com
 	@docker-compose -f docker-compose-prod.yml --profile credit-card push
 
-# deploy to prod
-prod-deploy:
+# crate or update prod infrastructure
+prod-create-infra:
 	@docker context use ecs-context
 #@aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 537583533687.dkr.ecr.eu-west-1.amazonaws.com
 	@docker compose -f docker-compose-deploy-prod.yml --profile credit-card --project-name services-cc up

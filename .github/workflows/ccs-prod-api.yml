@@ -1,8 +1,9 @@
-name: Production - Deploy
+name: Credit Card Production API - Deploy
 
 on: 
   push:
     branches: [ main ]
+    paths: [ 'services/credit-card-api/**' ]
   workflow_dispatch:
 
 jobs:
@@ -60,8 +61,11 @@ jobs:
           aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin https://${CCAPI_IMAGE_REGISTRY_DOMAIN}
           make prod-push
 
+      # - name: Create Stack
+      #   run: |
+      #     make create-deploy-context 
+      #     make prod-create-infra
+
       - name: Deploy
-        run: |
-          make create-deploy-context 
-          make prod-deploy
+        run: make prod-deploy
  
