@@ -7,16 +7,7 @@ services:
     profiles: ["credit-card", "credit-card-api"]
     env_file:
       - .env
-    container_name: cache
     restart: always
-    volumes: 
-      - cache:/data
-    ports:
-      - "${CCAPI_REDIS_PORT}:${CCAPI_REDIS_PORT}"
-    healthcheck:
-      test: "exit 0"
-    networks:
-      - cca-network
 
   # CREDIT CARD API
   credit-card-api:
@@ -29,19 +20,9 @@ services:
       APP_PORT: ${CCAPI_APP_PORT}
       NODE_ENV: ${NODE_ENV}
       LOG_LEVEL: ${LOG_LEVEL}
-    ports:
-      - "${CCAPI_APP_PORT}:${CCAPI_APP_PORT}"
-    depends_on:
-      redis:
-        condition: service_started
     build:
       context: .
       dockerfile: ./services/credit-card-api/Dockerfile.prod
-    networks:
-      - cca-network
-    volumes:
-      - ./services/credit-card-api/src/:/var/app/credit-card-api/src
-      - /var/app/node_modules
 
   #CREDIT CARD GUI
   credit-card-gui:
@@ -55,18 +36,4 @@ services:
     build:
       context: .
       dockerfile: ./apps/credit-card-gui/Dockerfile.prod
-    ports:
-      - "${CCGUI_APP_PORT}:${CCGUI_APP_PORT}"
-    depends_on:
-      - credit-card-api
-    stdin_open: true
-    volumes:
-       - ./apps/credit-card-gui/:/var/web/apps/credit-card-gui
-       - /var/app/node_modules
-networks:
-  cca-network:
-    driver: bridge
 
-volumes:
-  cache:
-    driver: local
