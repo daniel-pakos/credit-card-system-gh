@@ -19,6 +19,7 @@ jobs:
           cache: npm
 
       - name: Prepare
+        uses: actions/checkout@v3
         env:
             CCAPI_REDIS_PORT: ${CCAPI_REDIS_PORT}
             CCAPI_APP_PORT: ${CAPI_APP_PORT}
@@ -34,6 +35,7 @@ jobs:
             touch .env \
             curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh \
             cd ../../ \
+            ls -las \
             make create-deploy-context 
 
       - name: Lint
