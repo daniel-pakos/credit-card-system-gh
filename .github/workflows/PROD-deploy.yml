@@ -43,6 +43,9 @@ jobs:
           curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
           npm install -g turbo
 
+      - name: Install deps
+        run: npm ci --include=dev
+
       - name: Lint
         run: make lint
 
